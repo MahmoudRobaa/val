@@ -789,7 +789,7 @@
 
         function setMuted(muted) {
             isMuted = muted;
-            video.muted = isMuted;
+            video.muted = true; // Video always muted, music only
             bgMusic.muted = isMuted;
             if (!isMuted && !musicStarted) {
                 bgMusic.play().catch(() => {});
