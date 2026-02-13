@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+
+    <!-- Pixel Heart Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%23ef4444' d='M2 8V5H5V2H8V5H11V2H14V5H17V2H20V5H23V8H20V11H23V14H20V17H17V20H14V23H11V20H8V23H5V20H2V17H5V14H2V11H5V8H2Z'/></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Press Start 2P for headers, VT323 for body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'VT323', monospace;
+            overflow: hidden;
+            image-rendering: pixelated;
+            /* Custom pixel crosshair cursor */
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Crect x='11' y='0' width='2' height='8' fill='%23fff'/%3E%3Crect x='11' y='16' width='2' height='8' fill='%23fff'/%3E%3Crect x='0' y='11' width='8' height='2' fill='%23fff'/%3E%3Crect x='16' y='11' width='8' height='2' fill='%23fff'/%3E%3Crect x='10' y='10' width='4' height='4' fill='%23ef4444'/%3E%3C/svg%3E") 12 12, crosshair;
+        }
+
+        .font-pixel-header {
+            font-family: 'Press Start 2P', cursive;
+            line-height: 1.5;
+        }
+
+        /* Retro Game Card Style */
+        .pixel-card {
+            background: rgba(20, 20, 35, 0.85);
+            border: 4px solid #fff;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.6);
+            image-rendering: pixelated;
+        }
+
+        /* Card entrance animation */
+        .pixel-card.card-enter {
+            animation: cardSlideIn 0.8s steps(8) forwards;
+        }
+
+        @keyframes cardSlideIn {
+            0% { opacity: 0; transform: translateY(40px) scale(0.9); }
+            50% { opacity: 1; }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Pixel Button Style */
+        .pixel-btn {
+            border: 2px solid #fff;
+            box-shadow: 4px 4px 0px #000;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        .pixel-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        .pixel-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Neon glow on pink/red text */
+        .neon-glow {
+            animation: neonPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            0% { text-shadow: 0 0 4px #f472b6, 0 0 8px #f472b6; }
+            100% { text-shadow: 0 0 8px #ec4899, 0 0 20px #ec4899, 0 0 40px #db2777; }
+        }
+
+        .neon-glow-red {
+            animation: neonPulseRed 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonPulseRed {
+            0% { text-shadow: 0 0 4px #ef4444, 0 0 8px #ef4444; }
+            100% { text-shadow: 0 0 8px #dc2626, 0 0 20px #dc2626, 0 0 40px #b91c1c; }
+        }
+
+        /* Screen shake */
+        .screen-shake {
+            animation: shake 0.3s steps(4);
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-4px, 2px); }
+            50% { transform: translate(4px, -2px); }
+            75% { transform: translate(-2px, 4px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Floating Hearts Animation */
+        .floating-heart {
+            position: absolute;
+            bottom: -20px;
+            animation: floatUp 15s steps(10) infinite;
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+            font-size: 24px;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-110vh) scale(1); opacity: 0; }
+        }
+
+        /* Pixel Heart Animation */
+        .pixel-heart-beat {
+            animation: beat 1.5s steps(2) infinite;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Typewriter cursor blink */
+        .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #f472b6;
+            margin-left: 2px;
+            animation: cursorBlink 0.6s steps(1) infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes cursorBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Twinkling pixel stars */
+        .pixel-star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle var(--twinkle-dur) steps(2) infinite;
+            animation-delay: var(--twinkle-delay);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 1; }
+        }
+
+        /* Attempt counter style */
+        .attempt-counter {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            transition: color 0.2s;
+        }
+
+        .attempt-counter.active {
+            color: #fbbf24;
+        }
+
+        /* Loading Screen */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: #0a0a0f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s;
+        }
+
+        #loadingScreen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: #fff;
+            animation: loadingBlink 1s steps(1) infinite;
+        }
+
+        .coin-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            color: #fbbf24;
+            margin-top: 2rem;
+            animation: loadingBlink 1.5s steps(1) infinite;
+        }
+
+        @keyframes loadingBlink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        .loading-bar-container {
+            width: 200px;
+            height: 12px;
+            border: 2px solid #fff;
+            margin-top: 1.5rem;
+            padding: 2px;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: #ef4444;
+            width: 0%;
+            transition: width 0.3s steps(5);
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 50%,
+                rgba(0,0,0,0.2)
+            );
+            background-size: 100% 4px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+        
+        /* CRT Flicker */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(18, 16, 16, 0.1);
+            opacity: 0;
+            z-index: 2;
+            pointer-events: none;
+            animation: flicker 0.15s infinite;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.028; }
+            5% { opacity: 0.045; }
+            10% { opacity: 0.039; }
+            15% { opacity: 0.088; }
+            20% { opacity: 0.025; }
+            25% { opacity: 0.019; }
+            30% { opacity: 0.081; }
+            35% { opacity: 0.068; }
+            40% { opacity: 0.029; }
+            45% { opacity: 0.016; }
+            50% { opacity: 0.091; }
+            55% { opacity: 0.018; }
+            60% { opacity: 0.077; }
+            65% { opacity: 0.028; }
+            70% { opacity: 0.021; }
+            75% { opacity: 0.026; }
+            80% { opacity: 0.033; }
+            85% { opacity: 0.088; }
+            90% { opacity: 0.063; }
+            95% { opacity: 0.028; }
+            100% { opacity: 0.054; }
+        }
+
+        /* Bonus round cards */
+        .bonus-card .pixel-btn {
+            min-width: 140px;
+        }
+
+        /* Retro image frame */
+        .pixel-img-frame {
+            border: 4px solid #fff;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+            image-rendering: auto;
+            background: rgba(0,0,0,0.3);
+            padding: 4px;
+            display: inline-block;
+        }
+
+        .pixel-img-frame img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Floating bob animation for images */
+        .img-float {
+            animation: imgBob 3s ease-in-out infinite;
+        }
+
+        @keyframes imgBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Loading screen image */
+        .loading-img {
+            max-width: 180px;
+            max-height: 180px;
+            border: 3px solid rgba(255,255,255,0.3);
+            opacity: 0.85;
+            animation: loadingPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
+        }
+
+        /* Card image sizing */
+        .card-img-sm {
+            width: 120px;
+            height: 120px;
+            border-radius: 4px;
+        }
+
+        .card-img-md {
+            width: 160px;
+            height: 160px;
+            border-radius: 4px;
+        }
+
+        .card-img-lg {
+            width: 200px;
+            height: 200px;
+            border-radius: 4px;
+        }
+
+        /* Decorative corner images */
+        .corner-img {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.15;
+            filter: blur(0.5px);
+            transition: opacity 0.5s;
+        }
+
+        .corner-img:hover {
+            opacity: 0.35;
+        }
+
+        .corner-img.top-left {
+            top: 1rem;
+            left: 1rem;
+            width: 100px;
+            height: 100px;
+        }
+
+        .corner-img.bottom-right {
+            bottom: 3rem;
+            right: 1rem;
+            width: 100px;
+            height: 100px;
+        }
+
+        /* Prefers reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .scanlines { display: none; }
+            .crt::before { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white h-screen w-screen flex items-center justify-center relative crt">
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" role="alert" aria-live="polite" aria-label="Loading game">
+        <div class="pixel-img-frame loading-img mb-6 rounded">
+            <img src="Gemini_Generated_Image_3bup5l3bup5l3bup.png" alt="Valentine loading art" class="rounded">
+        </div>
+        <p class="loading-text">LOADING...</p>
+        <div class="loading-bar-container">
+            <div id="loadingBarFill" class="loading-bar-fill"></div>
+        </div>
+        <p class="coin-text">INSERT COIN TO CONTINUE</p>
+    </div>
+
+    <!-- Background Video -->
+    <video 
+        autoplay 
+        muted 
+        loop 
+        playsinline 
+        id="bgVideo"
+        class="absolute top-0 left-0 min-w-full min-h-full w-auto h-auto object-cover z-0 opacity-80"
+        style="image-rendering: pixelated;"
+    >
+        <source src="Website_Background_Video_Generation.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Pixel Stars Background -->
+    <div id="starsContainer" class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none"></div>
+
+    <!-- Scanline Overlay -->
+    <div class="scanlines"></div>
+
+    <!-- Dark Overlay -->
+    <div class="absolute top-0 left-0 w-full h-full bg-black/50 z-0"></div>
+
+    <!-- Sound Button -->
+    <button id="soundToggle" aria-label="Toggle sound" class="absolute top-6 right-6 z-50 p-2 border-2 border-white bg-black/50 hover:bg-white/20 text-white shadow-[4px_4px_0px_#000] active:translate-y-1 active:shadow-none transition-all">
+        <i data-lucide="volume-x" id="soundIcon" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Keyboard hint -->
+    <div class="absolute top-6 left-6 z-50 font-pixel-header text-[8px] text-white/30 hidden sm:block" aria-hidden="true">
+        [Y] YES &nbsp; [N] NO
+    </div>
+
+    <!-- Hearts Container -->
+    <div id="heartsContainer" class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none"></div>
+
+    <!-- Decorative corner images -->
+    <img src="Gemini_Generated_Image_sfm6sysfm6sysfm6.png" alt="" class="corner-img top-left hidden sm:block" aria-hidden="true">
+    <img src="Gemini_Generated_Image_xixd7bxixd7bxixd.png" alt="" class="corner-img bottom-right hidden sm:block" aria-hidden="true">
+
+    <!-- Main Content -->
+    <main id="mainContent" class="relative z-10 p-4 max-w-lg w-full mx-4" role="main">
+        
+        <!-- Step 1: The Question -->
+        <div id="questionCard" class="pixel-card card-enter p-8 sm:p-10 text-center transform transition-all duration-300" role="dialog" aria-label="Valentine's Day question">
+            <div class="mb-6 flex justify-center">
+                <div class="pixel-img-frame card-img-md img-float">
+                    <img src="Gemini_Generated_Image_o8eibvo8eibvo8ei.png" alt="Valentine pixel art">
+                </div>
+            </div>
+            
+            <h1 class="font-pixel-header text-2xl sm:text-3xl mb-6 text-pink-300 neon-glow leading-relaxed">
+                PLAYER 1 <br> NEEDS A COMPANION
+            </h1>
+            
+            <p id="typewriterTarget" class="text-2xl text-gray-200 mb-2 leading-relaxed" aria-label="The level is tough alone. Will you be my Valentine?">
+                <!-- Typewriter fills this -->
+            </p>
+
+            <!-- Attempt Counter -->
+            <p id="attemptCounter" class="attempt-counter mb-6 h-5" aria-live="polite"></p>
+
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center relative h-20">
+                <!-- Yes Button -->
+                <button onclick="acceptLove()" aria-label="Yes, be my Valentine" class="pixel-btn px-6 py-4 bg-red-600 hover:bg-red-500 w-full sm:w-auto text-xl font-bold neon-glow-red">
+                    <span class="mr-2">►</span> YES
+                </button>
+                
+                <!-- No Button -->
+                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()" aria-label="No" class="pixel-btn px-6 py-4 bg-gray-800 hover:bg-gray-700 w-full sm:w-auto text-xl text-gray-400 absolute sm:static transition-all duration-100">
+                    NO
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Success Message -->
+        <div id="successCard" class="hidden pixel-card p-8 sm:p-12 text-center" role="dialog" aria-label="Valentine accepted">
+            <div class="mb-6 flex justify-center items-center gap-4">
+                 <svg width="60" height="60" viewBox="0 0 24 24" fill="none" class="animate-bounce" aria-hidden="true">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 8V5H5V2H8V5H11V2H14V5H17V2H20V5H23V8H20V11H23V14H20V17H17V20H14V23H11V20H8V23H5V20H2V17H5V14H2V11H5V8H2Z" fill="#ef4444"/>
+                </svg>
+            </div>
+            
+            <h2 class="font-pixel-header text-3xl mb-6 text-yellow-400 neon-glow">
+                LEVEL UP!
+            </h2>
+            
+            <p class="text-2xl text-white mb-8">
+                Achievement Unlocked: <br>
+                <span class="text-pink-300 neon-glow">Valentine Acquired!</span>
+            </p>
+            
+            <div class="p-4 bg-black/40 border-2 border-gray-600 inline-block text-left font-mono text-lg mb-8">
+                <p class="text-green-400">> DATE_ESTABLISHED: 02/14</p>
+                <p class="text-green-400">> STATUS: HAPPY</p>
+                <p class="text-green-400">> XP_GAINED: +9999</p>
+                <p id="attemptStat" class="text-green-400"></p>
+            </div>
+
+            <div class="flex flex-col items-center gap-4">
+                <button onclick="startBonusRound()" class="pixel-btn px-6 py-3 bg-purple-700 hover:bg-purple-600 text-lg font-bold">
+                    <span class="mr-2">►</span> BONUS ROUND
+                </button>
+                <button onclick="resetCard()" class="text-lg text-gray-500 hover:text-white uppercase hover:underline decoration-4 underline-offset-4 font-bold">
+                    [ Restart Level ]
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Bonus Round - Movie Night -->
+        <div id="bonusCard1" class="hidden pixel-card bonus-card p-8 sm:p-10 text-center" role="dialog" aria-label="Bonus round: Movie night">
+            <p class="font-pixel-header text-[10px] text-purple-400 mb-4">BONUS ROUND 1</p>
+            <div class="mb-4 flex justify-center">
+                <div class="pixel-img-frame card-img-sm img-float">
+                    <img src="Gemini_Generated_Image_sfm6sysfm6sysfm6.png" alt="Movie night art">
+                </div>
+            </div>
+            <h2 class="font-pixel-header text-xl sm:text-2xl mb-6 text-yellow-300 neon-glow">
+                MOVIE NIGHT?
+            </h2>
+            <p class="text-2xl text-gray-200 mb-8">
+                Co-op mode: snacks + blankets.<br>
+                <span class="text-pink-400 neon-glow">Join the party?</span>
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="bonusAccept(1)" class="pixel-btn px-6 py-3 bg-red-600 hover:bg-red-500 text-lg font-bold">
+                    <span class="mr-2">►</span> YES!
+                </button>
+                <button onclick="bonusAccept(1)" class="pixel-btn px-6 py-3 bg-pink-700 hover:bg-pink-600 text-lg font-bold">
+                    <span class="mr-2">►</span> OBVIOUSLY
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 4: Bonus Round - Dinner Date -->
+        <div id="bonusCard2" class="hidden pixel-card bonus-card p-8 sm:p-10 text-center" role="dialog" aria-label="Bonus round: Dinner date">
+            <p class="font-pixel-header text-[10px] text-purple-400 mb-4">BONUS ROUND 2</p>
+            <div class="mb-4 flex justify-center">
+                <div class="pixel-img-frame card-img-sm img-float">
+                    <img src="Gemini_Generated_Image_xixd7bxixd7bxixd.png" alt="Dinner date art">
+                </div>
+            </div>
+            <h2 class="font-pixel-header text-xl sm:text-2xl mb-6 text-yellow-300 neon-glow">
+                DINNER DATE?
+            </h2>
+            <p class="text-2xl text-gray-200 mb-8">
+                Power-up required: good food.<br>
+                <span class="text-pink-400 neon-glow">Accept the quest?</span>
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="bonusAccept(2)" class="pixel-btn px-6 py-3 bg-red-600 hover:bg-red-500 text-lg font-bold">
+                    <span class="mr-2">►</span> LET'S GO
+                </button>
+                <button onclick="bonusAccept(2)" class="pixel-btn px-6 py-3 bg-pink-700 hover:bg-pink-600 text-lg font-bold">
+                    <span class="mr-2">►</span> ABSOLUTELY
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 5: Final Victory Screen -->
+        <div id="finalCard" class="hidden pixel-card p-8 sm:p-12 text-center" role="dialog" aria-label="All levels complete">
+            <div class="mb-6 flex justify-center">
+                <div class="pixel-img-frame card-img-lg img-float" style="border-color: #fbbf24; box-shadow: 4px 4px 0px rgba(251,191,36,0.5), 0 0 20px rgba(251,191,36,0.2);">
+                    <img src="Gemini_Generated_Image_3bup5l3bup5l3bup.png" alt="Victory art">
+                </div>
+            </div>
+
+            <h2 class="font-pixel-header text-2xl sm:text-3xl mb-6 text-yellow-400 neon-glow">
+                ALL LEVELS COMPLETE!
+            </h2>
+
+            <p class="text-2xl text-white mb-6">
+                You unlocked the <br>
+                <span class="text-pink-300 neon-glow font-bold">ULTIMATE VALENTINE</span>
+                <br> achievement!
+            </p>
+
+            <div class="p-4 bg-black/40 border-2 border-yellow-600 inline-block text-left font-mono text-lg mb-8">
+                <p class="text-yellow-400">> RANK: S+</p>
+                <p class="text-yellow-400">> TITLE: LOVE CHAMPION</p>
+                <p class="text-yellow-400">> HEARTS: &#9829;&#9829;&#9829;&#9829;&#9829;</p>
+                <p class="text-yellow-400">> TOTAL_XP: +99999</p>
+            </div>
+
+            <div>
+                <button onclick="resetCard()" class="text-lg text-gray-500 hover:text-white uppercase hover:underline decoration-4 underline-offset-4 font-bold">
+                    [ Play Again ]
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Text -->
+    <div class="absolute bottom-4 w-full text-center z-10">
+        <p class="text-white/40 text-sm font-pixel-header text-[10px]">PRESS START TO BEGIN LOVE</p>
+    </div>
+
+    <script>
+        // ─── 8-BIT SOUND EFFECTS (Base64 PCM) ───
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function ensureAudioCtx() {
+            if (!audioCtx) audioCtx = new AudioCtx();
+            return audioCtx;
+        }
+
+        function playBlip(freq = 880, duration = 0.08, type = 'square') {
+            try {
+                const ctx = ensureAudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function playDodgeSound() {
+            playBlip(220, 0.06, 'sawtooth');
+            setTimeout(() => playBlip(160, 0.06, 'sawtooth'), 60);
+        }
+
+        function playSuccessSound() {
+            playBlip(523, 0.12);
+            setTimeout(() => playBlip(659, 0.12), 120);
+            setTimeout(() => playBlip(784, 0.12), 240);
+            setTimeout(() => playBlip(1047, 0.25), 360);
+        }
+
+        function playBonusSound() {
+            playBlip(440, 0.1);
+            setTimeout(() => playBlip(554, 0.1), 100);
+            setTimeout(() => playBlip(659, 0.15), 200);
+        }
+
+        function playTypingSound() {
+            playBlip(1200 + Math.random() * 400, 0.03, 'square');
+        }
+
+        // ─── LOADING SCREEN ───
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingBarFill = document.getElementById('loadingBarFill');
+        let loadProgress = 0;
+
+        const loadInterval = setInterval(() => {
+            loadProgress += Math.random() * 25 + 5;
+            if (loadProgress > 100) loadProgress = 100;
+            loadingBarFill.style.width = loadProgress + '%';
+            if (loadProgress >= 100) {
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    loadingScreen.classList.add('fade-out');
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        startTypewriter();
+                    }, 500);
+                }, 400);
+            }
+        }, 300);
+
+        // Click to skip loading
+        loadingScreen.addEventListener('click', () => {
+            loadProgress = 100;
+            loadingBarFill.style.width = '100%';
+        });
+
+        // ─── INITIALIZE ICONS ───
+        lucide.createIcons();
+
+        // ─── PIXEL STARS BACKGROUND ───
+        function createPixelStars() {
+            const container = document.getElementById('starsContainer');
+            const starCount = 60;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('pixel-star');
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--twinkle-dur', (Math.random() * 3 + 1) + 's');
+                star.style.setProperty('--twinkle-delay', (Math.random() * 5) + 's');
+                // Vary size: some 2px, some 3px
+                if (Math.random() > 0.7) {
+                    star.style.width = '3px';
+                    star.style.height = '3px';
+                    star.style.background = '#fbbf24'; // Gold stars
+                }
+                container.appendChild(star);
+            }
+        }
+        createPixelStars();
+
+        // ─── TYPEWRITER EFFECT ───
+        const typewriterLines = [
+            { text: 'The level is tough alone.', cls: 'text-gray-200' },
+            { text: '', cls: '' }, // line break
+            { text: 'Will you be my Valentine?', cls: 'text-pink-400 neon-glow' }
+        ];
+        let twLineIdx = 0, twCharIdx = 0;
+        const twTarget = document.getElementById('typewriterTarget');
+
+        function startTypewriter() {
+            twTarget.innerHTML = '';
+            twLineIdx = 0;
+            twCharIdx = 0;
+            typeNextChar();
+        }
+
+        function typeNextChar() {
+            if (twLineIdx >= typewriterLines.length) {
+                // Remove cursor when done
+                const cursor = twTarget.querySelector('.typewriter-cursor');
+                if (cursor) setTimeout(() => cursor.remove(), 1500);
+                return;
+            }
+
+            const line = typewriterLines[twLineIdx];
+
+            if (line.text === '') {
+                twTarget.innerHTML += '<br>';
+                twLineIdx++;
+                twCharIdx = 0;
+                setTimeout(typeNextChar, 200);
+                return;
+            }
+
+            if (twCharIdx === 0) {
+                // Start a new span for this line
+                const span = document.createElement('span');
+                span.className = line.cls;
+                span.id = 'tw-line-' + twLineIdx;
+                twTarget.appendChild(span);
+            }
+
+            const span = document.getElementById('tw-line-' + twLineIdx);
+            
+            // Remove old cursor
+            const oldCursor = twTarget.querySelector('.typewriter-cursor');
+            if (oldCursor) oldCursor.remove();
+
+            if (twCharIdx < line.text.length) {
+                span.textContent += line.text[twCharIdx];
+                // Add cursor after current char
+                const cursor = document.createElement('span');
+                cursor.className = 'typewriter-cursor';
+                cursor.setAttribute('aria-hidden', 'true');
+                span.appendChild(cursor);
+
+                twCharIdx++;
+                if (twCharIdx % 3 === 0) playTypingSound();
+                setTimeout(typeNextChar, 55 + Math.random() * 30);
+            } else {
+                twLineIdx++;
+                twCharIdx = 0;
+                setTimeout(typeNextChar, 300);
+            }
+        }
+
+        // ─── AUDIO CONTROL ───
+        const video = document.getElementById('bgVideo');
+        const soundBtn = document.getElementById('soundToggle');
+        const soundIcon = document.getElementById('soundIcon');
+        let isMuted = true;
+
+        soundBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            video.muted = isMuted;
+            soundIcon.setAttribute('data-lucide', isMuted ? 'volume-x' : 'volume-2');
+            lucide.createIcons();
+            playBlip(600, 0.05);
+        });
+
+        // ─── NO BUTTON LOGIC (shrink + counter + shake) ───
+        const noBtn = document.getElementById('noBtn');
+        const mainContent = document.getElementById('mainContent');
+        let noAttempts = 0;
+        let noBtnScale = 1;
+        const attemptCounter = document.getElementById('attemptCounter');
+        
+        function moveButton() {
+            noAttempts++;
+            noBtnScale = Math.max(0.3, noBtnScale - 0.08); // Shrink each time
+
+            const maxMoveX = 140;
+            const maxMoveY = 100;
+            const randomX = (Math.random() * maxMoveX * 2) - maxMoveX;
+            const randomY = (Math.random() * maxMoveY * 2) - maxMoveY;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px) scale(${noBtnScale})`;
+            noBtn.style.opacity = Math.max(0.3, noBtnScale);
+            
+            // Retro Texts
+            const texts = ["NO WAY", "ERROR 404", "TRY AGAIN", "LOCKED", "NOPE", "DENIED", "INVALID", "BLOCKED", "NADA"];
+            noBtn.innerText = texts[Math.floor(Math.random() * texts.length)];
+
+            // Update attempt counter
+            attemptCounter.textContent = `DODGE ATTEMPTS: ${noAttempts}`;
+            attemptCounter.classList.add('active');
+
+            // Screen shake
+            mainContent.classList.remove('screen-shake');
+            void mainContent.offsetWidth; // Force reflow
+            mainContent.classList.add('screen-shake');
+
+            // Play dodge sound
+            playDodgeSound();
+
+            // If shrunk enough, hide completely
+            if (noBtnScale <= 0.3) {
+                setTimeout(() => {
+                    noBtn.style.visibility = 'hidden';
+                    attemptCounter.textContent = `DODGE ATTEMPTS: ${noAttempts} — NO BUTTON DESTROYED!`;
+                }, 100);
+            }
+        }
+
+        // ─── YES BUTTON LOGIC ───
+        function acceptLove() {
+            const qCard = document.getElementById('questionCard');
+            const sCard = document.getElementById('successCard');
+
+            qCard.classList.add('hidden');
+            sCard.classList.remove('hidden');
+            sCard.classList.add('card-enter');
+
+            // Show attempt stat
+            const attemptStat = document.getElementById('attemptStat');
+            if (noAttempts > 0) {
+                attemptStat.textContent = `> NO_DODGES: ${noAttempts}`;
+            }
+
+            // Confetti + sounds
+            launchPixelConfetti();
+            playSuccessSound();
+            
+            video.muted = false;
+            isMuted = false;
+            soundIcon.setAttribute('data-lucide', 'volume-2');
+            lucide.createIcons();
+        }
+
+        // ─── BONUS ROUNDS ───
+        function startBonusRound() {
+            playBonusSound();
+            document.getElementById('successCard').classList.add('hidden');
+            const b1 = document.getElementById('bonusCard1');
+            b1.classList.remove('hidden');
+            b1.classList.add('card-enter');
+            launchPixelConfetti();
+        }
+
+        function bonusAccept(round) {
+            playSuccessSound();
+            if (round === 1) {
+                document.getElementById('bonusCard1').classList.add('hidden');
+                const b2 = document.getElementById('bonusCard2');
+                b2.classList.remove('hidden');
+                b2.classList.add('card-enter');
+                launchPixelConfetti();
+            } else {
+                document.getElementById('bonusCard2').classList.add('hidden');
+                const fc = document.getElementById('finalCard');
+                fc.classList.remove('hidden');
+                fc.classList.add('card-enter');
+                // Big confetti finale
+                launchPixelConfetti();
+                setTimeout(() => launchPixelConfetti(), 1000);
+                setTimeout(() => launchPixelConfetti(), 2000);
+            }
+        }
+
+        // ─── RESET ───
+        function resetCard() {
+            const cards = ['successCard', 'bonusCard1', 'bonusCard2', 'finalCard'];
+            cards.forEach(id => document.getElementById(id).classList.add('hidden'));
+            
+            const qCard = document.getElementById('questionCard');
+            qCard.classList.remove('hidden');
+            qCard.classList.add('card-enter');
+            
+            noBtn.style.transform = 'translate(0, 0) scale(1)';
+            noBtn.style.opacity = '1';
+            noBtn.style.visibility = 'visible';
+            noBtn.removeAttribute('style');
+            noBtn.innerText = "NO";
+            
+            noAttempts = 0;
+            noBtnScale = 1;
+            attemptCounter.textContent = '';
+            attemptCounter.classList.remove('active');
+            document.getElementById('attemptStat').textContent = '';
+
+            // Restart typewriter
+            startTypewriter();
+            playBlip(440, 0.1);
+        }
+
+        // ─── KEYBOARD SUPPORT ───
+        document.addEventListener('keydown', (e) => {
+            const key = e.key.toLowerCase();
+            
+            // Don't interfere during loading
+            if (loadingScreen.style.display !== 'none' && !loadingScreen.classList.contains('fade-out')) {
+                if (key === ' ' || key === 'enter') {
+                    loadProgress = 100;
+                    loadingBarFill.style.width = '100%';
+                }
+                return;
+            }
+
+            const qCard = document.getElementById('questionCard');
+            const sCard = document.getElementById('successCard');
+            const b1 = document.getElementById('bonusCard1');
+            const b2 = document.getElementById('bonusCard2');
+
+            if (key === 'y') {
+                if (!qCard.classList.contains('hidden')) {
+                    acceptLove();
+                } else if (!b1.classList.contains('hidden')) {
+                    bonusAccept(1);
+                } else if (!b2.classList.contains('hidden')) {
+                    bonusAccept(2);
+                } else if (!sCard.classList.contains('hidden')) {
+                    startBonusRound();
+                }
+            } else if (key === 'n') {
+                if (!qCard.classList.contains('hidden')) {
+                    moveButton();
+                }
+            } else if (key === 'r') {
+                resetCard();
+            }
+        });
+
+        // ─── PIXELATED CONFETTI ───
+        function launchPixelConfetti() {
+            const duration = 3000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 50, shapes: ['square'] };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // ─── FLOATING PIXEL HEARTS ───
+        function createFloatingHearts() {
+            const container = document.getElementById('heartsContainer');
+            for (let i = 0; i < 10; i++) {
+                createHeart(container);
+            }
+        }
+
+        function createHeart(container) {
+            const heart = document.createElement('div');
+            heart.style.width = '10px';
+            heart.style.height = '10px';
+            heart.style.backgroundColor = 'rgba(239, 68, 68, 0.6)';
+            heart.style.boxShadow = '10px 0 rgba(239, 68, 68, 0.6), -10px 0 rgba(239, 68, 68, 0.6), 0 -10px rgba(239, 68, 68, 0.6)';
+            heart.classList.add('floating-heart');
+            heart.setAttribute('aria-hidden', 'true');
+            
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            heart.style.animationDelay = (Math.random() * 15) + 's';
+            
+            container.appendChild(heart);
+        }
+
+        createFloatingHearts();
+
+    </script>
+</body>
+</html>
