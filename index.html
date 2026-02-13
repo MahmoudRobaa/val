@@ -427,6 +427,11 @@
     <!-- Pixel Stars Background -->
     <div id="starsContainer" class="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none"></div>
 
+    <!-- Background Music -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="Frank_Sinatra_-_I_love_you_baby_(SkySound.cc).mp3" type="audio/mpeg">
+    </audio>
+
     <!-- Scanline Overlay -->
     <div class="scanlines"></div>
 
@@ -776,15 +781,26 @@
 
         // ─── AUDIO CONTROL ───
         const video = document.getElementById('bgVideo');
+        const bgMusic = document.getElementById('bgMusic');
         const soundBtn = document.getElementById('soundToggle');
         const soundIcon = document.getElementById('soundIcon');
         let isMuted = true;
+        let musicStarted = false;
 
-        soundBtn.addEventListener('click', () => {
-            isMuted = !isMuted;
+        function setMuted(muted) {
+            isMuted = muted;
             video.muted = isMuted;
+            bgMusic.muted = isMuted;
+            if (!isMuted && !musicStarted) {
+                bgMusic.play().catch(() => {});
+                musicStarted = true;
+            }
             soundIcon.setAttribute('data-lucide', isMuted ? 'volume-x' : 'volume-2');
             lucide.createIcons();
+        }
+
+        soundBtn.addEventListener('click', () => {
+            setMuted(!isMuted);
             playBlip(600, 0.05);
         });
 
@@ -852,10 +868,11 @@
             launchPixelConfetti();
             playSuccessSound();
             
-            video.muted = false;
-            isMuted = false;
-            soundIcon.setAttribute('data-lucide', 'volume-2');
-            lucide.createIcons();
+            // Start music & unmute everything
+            bgMusic.currentTime = 0;
+            bgMusic.play().catch(() => {});
+            musicStarted = true;
+            setMuted(false);
         }
 
         // ─── BONUS ROUNDS ───
